@@ -1,0 +1,26 @@
+﻿@model OnlineLearning.Models.Domains.AIModels.AITrainingData
+
+@{
+    ViewData["Title"] = "Thêm Dữ Liệu Huấn Luyện AI";
+}
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-success">@ViewBag.Message</div>
+    }
+
+    <form asp-action="AddTrainingData" method="post">
+        <div class="mb-3">
+            <label class="form-label">Input Question</label>
+            <input asp-for="InputText" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Expected Result</label>
+            <textarea asp-for="ExpectedOutput" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+
