@@ -1,6 +1,16 @@
 # eLEARNING_GROUP3
 Online Learning Platform
 
+Group Member
+
+- Tran Dinh Hung
+  
+- Nguyen Xuan Hau
+  
+- Phan Quoc Dai
+
+- Pham Dinh Phuong Sang
+
 1) Introduction
 Online Learning Platform is a web application developed using ASP.NET CORE MVC. The goal of the project is to provide an online learning platform for students and instructors, optimizing course management, tracking learning progress, and enhancing the learning experience.
 
