@@ -1,0 +1,167 @@
+﻿@model List<MyCourseDto>
+@{
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-10">
+                <h1 class="display-3 text-dark animated slideInDown">My Learning</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container light-style flex-grow-1 container-p-y">
+        <div class="overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#MyCouses-courses" id="courses-tab">My Courses</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#MyCouses-wishlist" id="wishlist-tab">WishList</a>
+                    </div>
+                </div>
+
+                <div class="col-md-9 card_mine">
+                    <div class="tab-content">
+                        <div class="tab-pane fade" id="MyCouses-courses">
+                            @* @if (!string.IsNullOrEmpty(Model.Error))
+                            {
+                            <h3 style="color: red">@Model.Error</h3>
+                            } *@
+
+                            <div class="card-body pb-2">
+                                @if (Model != null && Model.Any())
+                                {
+                                    @foreach (var course in Model)
+                                    {
+                                        <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
+                                            <div class="col-lg-2">
+                                                <img src="@(course.CourseUrls.FirstOrDefault())" width="100%" height="auto" alt="course image" />
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <label class="form-label" style="color: black; font-size: 15px">Course | @course.Creator</label><br>
+                                                <label class="form-label" style="color: #06BBCC; font-size: 27px">@course.CourseName</label><br>
+                                                <div>
+                                                    <progress style="width: 80%; height: 15px;" max="100" value="@course.Progress"></progress>
+                                                    <label style="color: black; font-size: 15px;">@course.Progress%</label>
+                                                </div>
+                                                <label class="form-label" style="color: #666666; font-size: 13px">Overall Progress</label><br>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <a class="btn btn-outline-primary">Go to Course</a>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No courses available.</p>
+                                }
+                                <br>
+                                <hr class="border-light m-0">
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade " id="MyCouses-wishlist">
+                            @{
+                                var wishLists = ViewBag.WishLists as List<WishlistDTO>;
+                            }
+
+                            @if (wishLists != null)
+                            {
+                                foreach (var w in wishLists)
+                                {
+                                    <div class="card-body pb-2">
+
+                                        <form asp-controller="CourseProgress" asp-action="DeleteWishlist" method="post">
+                                            <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
+                                                <div class="col-lg-2">
+                                                    <img src="@(w.CourseUrls.FirstOrDefault())"
+                                                         width="100%" height="auto" alt="course image" />
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label class="form-label" style="color: black; font-size: 15px">Course | @w.Creator</label>&nbsp;&nbsp;
+                                                    <label class="form-label" style="color: black; font-size: 15px "> Star</label><br>
+                                                    <br>
+                                                    <label class="form-label" style="color: #06BBCC; font-size: 27px ">@w.CourseName</label><br>
+                                                    <label class="form-label" style="color: #06BBCC; font-size: 17px; text-decoration: line-through">@w.Price vnd</label><br>
+                                                    @* <label class="form-label" style="color: #06BBCC; font-size: 15px ">${w.price - (w.price * w.discount)/100} vnd</label> *@
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <a  class="btn btn-outline-primary">Go to Course</a>
+                                                    <button type="submit" onclick="return removeWishlist();" class="btn btn-outline-danger">Remove</button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <br>
+                                        <hr class="border-light m-0">
+                                    </div>
+                                }
+                            }else
+                            {
+                                <h3 style="color: red">Wishlist is empty</h3>
+
+                                <p>No Wishlist available.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/wow/wow.min.js"></script>
+<script src="~/lib/easing/easing.min.js"></script>
+<script src="~/lib/waypoints/waypoints.min.js"></script>
+<script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="~/js/main.js"></script>
+
+    <script>
+        function removeWishlist() {
+            if (confirm(" ⚠️ Are you sure you want to remove this wishlist?")) {
+                return true; 
+            } else {
+                return false; 
+            }
+        }
+    </script>
+<script>
+    function removeCourse(courseId) {
+        if (confirm("Are you sure you want to remove this course from your wishlist?")) {
+            fetch('@Url.Action("RemoveFromWishlist", "MyCourses")' + '?cid=' + courseId, {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Course removed successfully");
+                        window.location.href = '@Url.Action("Index", "MyCourses", new { activeTab = "wishlist" })';
+                    } else {
+                        alert("Failed to remove course");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while removing the course");
+                });
+        }
+    }
+
+    function setActiveTab() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTab = urlParams.get('activeTab');
+        if (activeTab === 'wishlist') {
+            document.getElementById('wishlist-tab').click();
+        } else {
+            document.getElementById('courses-tab').click();
+        }
+    }
+
+    window.onload = setActiveTab;
+</script>
