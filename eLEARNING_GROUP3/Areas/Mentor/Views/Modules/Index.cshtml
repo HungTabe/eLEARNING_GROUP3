@@ -1,0 +1,35 @@
+﻿@model ModuleDto
+@{
+    Layout = "_Layout";
+}
+
+    <div class="container">
+    <h3 style=" margin-top: 50px; margin-bottom: 50px;">
+        Add New Module
+    </h3>
+
+        <form asp-controller="Modules" asp-action="AddModules" method="post" >
+
+            <div class="mb-3">
+                <input type="hidden" class="form-control" asp-for="CourseId">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Module Name</label>
+                <input type="text" asp-for="ModuleName" class="form-control" placeholder="Enter module name">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Module Number</label>
+                <input type="text" asp-for="ModuleNumber" class="form-control" readonly>
+            </div>
+
+            <div class="d-flex justify-content-end">
+            <a asp-controller="Course" asp-action="CourseEdit" asp-route-id="@Model.CourseId" class="btn btn-light">Back</a>
+            <button type="submit" class="btn btn-submit">Add Module</button>
+            </div>
+        </form>
+
+    </div>
+
+

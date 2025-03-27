@@ -1,0 +1,27 @@
+﻿@model List<FAQsDTO>
+
+@{
+    ViewData["Title"] = "FAQ";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">FAQ</h1>
+
+    <div class="accordion" id="faqAccordion">
+        @foreach (var faq in Model)
+        {
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="heading-@faq.Id">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@faq.Id" aria-expanded="false" aria-controls="collapse-@faq.Id">
+                        <h3><strong>@faq.Question</strong></h3>
+                    </button>
+                </h3>
+                <div id="collapse-@faq.Id" class="accordion-collapse collapse my-3" aria-labelledby="heading-@faq.Id" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>@faq.Answer</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

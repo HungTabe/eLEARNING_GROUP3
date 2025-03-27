@@ -1,0 +1,174 @@
+﻿@using OnlineLearning.Models.Domains.CourseModels
+@model List<Course>
+
+
+
+@{
+    Layout = "_Layout";
+}
+
+
+<style>
+    table {
+        table-layout: fixed; /* Cố định bố cục bảng */
+        width: 100%;
+    }
+
+    th, td {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        text-align: center;
+    }
+
+        /* Đặt độ rộng cho các cột cụ thể */
+        th:nth-child(2), td:nth-child(2) { /* Course Name */
+            width: 20%;
+        }
+
+        th:nth-child(3), td:nth-child(3) { /* Description */
+            width: 30%;
+        }
+
+        td img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+    /* Đảm bảo bảng không bị tràn trên màn hình nhỏ */
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>📚 Course List</h3>
+        <a asp-controller="Course" asp-action="AddCourse" class="btn btn-primary animated slideInLeft">Create New Course</a>
+    </div>
+
+    <table class="table table-bordered" id="courseTable">
+        <thead>
+            <tr>
+                <th style="width: 5%;">STT</th>
+                <th style="width: 25%;">Course Name</th>
+                <th style="width: 35%;">Description</th>
+                <th style="width: 10%;">Price ($)</th>
+                <th style="width: 10%;">Discount</th>
+                <th style="width: 10%;">Language</th>
+                <th style="width: 10%;">Level</th>
+                <th style="width: 10%;">Course Type</th>
+                <th style="width: 10%;">Status</th>
+                <th style="width: 15%;">Image</th>
+                <th style="width: 10%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@Model[i].CourseName</td>
+                    <td>@Model[i].Description</td>
+                    <td>$@Model[i].Price</td>
+                    <td>@(Model[i].Discount ?? 0)%</td>
+                    <td>@(Model[i].Language?.LanguageName ?? "N/A")</td>
+                    <td>@(Model[i].Level?.LevelName ?? "N/A")</td>
+                    <td>
+                        @foreach (var courseType in Model[i].CourseCategories)
+                        {
+                            <span>@courseType.Category.CategoryName</span>
+
+                            <br />
+                        }
+                    </td>
+                    <td>@Model[i].Status</td>
+                    <td>
+                        @foreach (var image in Model[i].CourseImageUrls)
+                        {
+                            <img src="@image.Url" alt="Course Image" width="125" height="125" />
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Course" asp-action="CourseEdit" asp-route-id="@Model[i].CourseId" class="btn btn-warning btn-sm">✏ Edit</a>
+                        <a asp-controller="Course" asp-action="HiddenCourse" asp-route-id="@Model[i].CourseId" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">✏Draft</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="pagination" class="d-flex justify-content-center mt-3"></div>
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+
+<script>
+    function showToast(type, title, message) {
+        iziToast[type]({
+            title: title,
+            message: message,
+            position: 'topRight'
+        });
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var successMessage = '@TempData["Success"]';
+        if (successMessage) {
+            showToast('success', 'Success', successMessage);
+        }
+    });
+</script>
+
+<script>
+    // Phân trang bằng JavaScript
+    document.addEventListener("DOMContentLoaded", function () {
+        let table = document.getElementById("courseTable").getElementsByTagName("tbody")[0];
+        let rows = table.getElementsByTagName("tr");
+        let rowsPerPage = 5;
+        let currentPage = 1;
+
+        function displayTablePage(page) {
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = (i >= start && i < end) ? "table-row" : "none";
+            }
+        }
+
+        function createPagination() {
+            let totalPages = Math.ceil(rows.length / rowsPerPage);
+            let paginationDiv = document.getElementById("pagination");
+            paginationDiv.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                let btn = document.createElement("button");
+                btn.innerText = i;
+                btn.classList.add("btn", "btn-primary", "mx-1");
+                btn.addEventListener("click", function () {
+                    currentPage = i;
+                    displayTablePage(currentPage);
+                });
+                paginationDiv.appendChild(btn);
+            }
+        }
+
+        displayTablePage(currentPage);
+        createPagination();
+    });
+</script>

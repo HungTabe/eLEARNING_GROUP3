@@ -1,0 +1,43 @@
+﻿@model List<OnlineLearning.Models.Domains.AIModels.ChatbotMessage>
+
+@{
+    ViewData["Title"] = "Chatbot";
+}
+<h2>Chatbot</h2>
+<div id="chatbox">
+    @foreach (var message in Model)
+    {
+        if (message.UserQuery != null)
+        {
+            <p><strong>You:</strong> @message.UserQuery</p>
+        }
+        if (message.BotResponse != null)
+        {
+            <p><strong>Bot:</strong> @message.BotResponse</p>
+        }
+    }
+</div>
+<input type="text" id="userInput" placeholder="Ask chatbot...">
+<button onclick="sendMessage(@Model.First().UserId)">Send</button>
+
+@*<script src="~/lib/signalr/signalr.js"></script>*@
+@*nen tai thu vien off ve thay vi dung cai duoi*@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
+    connection.start();
+    connection.on("ReceiveMessage", function (userId, userQuery, botResponse) {
+        var chatbox = document.getElementById("chatbox");
+        chatbox.innerHTML += `<p><strong>Bạn:</strong> ${userQuery}</p>`;
+        chatbox.innerHTML += `<p><strong>Bot:</strong> ${botResponse}</p>`;
+    });
+
+    function sendMessage(userId) {
+        var userInput = document.getElementById("userInput").value;
+        if (!userInput.trim()) return;
+
+        connection.invoke("SendMessage", userId, userInput);
+        document.getElementById("userInput").value = "";
+    }
+</script>

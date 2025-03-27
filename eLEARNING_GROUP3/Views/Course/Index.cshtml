@@ -1,0 +1,168 @@
+
+﻿@{
+    Layout = "_Layout";
+}
+
+<style>
+    .course-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%; /* Đảm bảo tất cả các khung có cùng chiều cao */
+    }
+
+        .course-item img {
+            width: 100%; /* Chiều rộng cố định */
+            height: 200px; /* Chiều cao cố định */
+            object-fit: cover; /* Cắt bớt phần thừa thay vì làm méo ảnh */
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .course-item .text-center h5 {
+            font-size: 16px; /* Giới hạn cỡ chữ */
+            line-height: 1.4;
+            word-wrap: break-word; /* Xuống dòng nếu quá dài */
+            white-space: normal;
+            max-height: 3.2em; /* Giới hạn 2 dòng */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Hiển thị "..." nếu quá dài */
+        }
+
+        .course-item .text-center p {
+            font-size: 14px;
+            color: gray;
+            max-height: 2.4em; /* Giới hạn số dòng mô tả */
+            overflow: hidden;
+        }
+
+        .course-item .d-flex {
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
+        }
+
+    /* Đảm bảo tất cả các thẻ card có chiều cao bằng nhau */
+    .course-item {
+        min-height: 400px; /* Điều chỉnh chiều cao khung nếu cần */
+    }
+
+</style>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h3 class="section-title bg-white text-center text-primary px-3">Courses</h3>
+        </div>
+
+        <div id="courseList" class="row g-4 justify-content-center">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="col-lg-4 col-md-6 wow fadeInUp course-item-container" data-wow-delay="0.1s">
+                    <div class="course-item bg-light">
+                        <div class="position-relative overflow-hidden">
+                            @if (Model[i].CourseImageUrls != null && Model[i].CourseImageUrls.Count > 0)
+                            {
+                                <img class="img-fluid" src="@Model[i].CourseImageUrls[0].Url" alt="@Model[i].CourseName">
+                            }
+                            <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                <a data-course-id="@Model[i].CourseId" asp-controller="CourseProgress" asp-action="AddToWishlist" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end btn-wishlist" style="border-radius: 30px 0 0 30px;">Add to WishList</a>
+                                <a asp-controller="Course" asp-action="DetailsCourse" asp-route-id="@Model[i].CourseId" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Course Now</a>
+                            </div>
+                        </div>
+                        <div class="text-center p-4 pb-0">
+                            <h3 class="mb-0">$@Model[i].Price.ToString("0.00")</h3>
+                            <h5 class="mb-4">@Model[i].CourseName</h5>
+                        </div>
+                        <div class="d-flex border-top">
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i>John Doe</small>
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i>1.49 Hrs</small>
+                            <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i>30 Students</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Phân trang -->
+        <div id="pagination" class="text-center mt-4"></div>
+
+
+
+    </div>
+</div>
+
+@section Scripts {
+
+<script>
+
+    $(document).ready(function () {
+            $('.btn-wishlist').click(function (event) {
+            event.preventDefault(); // Ngăn không cho trang load lại
+                const courseIdData = $(this).data('course-id');
+                console.log("Idddd = ", courseIdData)
+            $.ajax({
+                url: '/Mentee/CourseProgress/AddToWishlist',
+                type: 'POST',  // hoặc 'GET' nếu API hỗ trợ
+                    data: { courseId: courseIdData }, // Gửi dữ liệu lên server
+                success: function (response) {
+                    alert(response.message || "Added to wishlist successfully!");
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", error);
+                    alert("Failed to add to wishlist.");
+                }
+            });
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const courses = document.querySelectorAll(".course-item-container");
+        const coursesPerPage = 9; // Số khóa học hiển thị trên mỗi trang
+        let currentPage = 1;
+
+        function showPage(page) {
+            const start = (page - 1) * coursesPerPage;
+            const end = start + coursesPerPage;
+
+            courses.forEach((course, index) => {
+                if (index >= start && index < end) {
+                    course.style.display = "block";
+                } else {
+                    course.style.display = "none";
+                }
+            });
+        }
+
+        function setupPagination() {
+            const totalPages = Math.ceil(courses.length / coursesPerPage);
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement("button");
+                btn.textContent = i;
+                btn.classList.add("btn", "btn-primary", "mx-1");
+                btn.addEventListener("click", function () {
+                    currentPage = i;
+                    showPage(currentPage);
+                    updateActiveButton();
+                });
+                pagination.appendChild(btn);
+            }
+
+            updateActiveButton();
+        }
+
+        function updateActiveButton() {
+            const buttons = document.querySelectorAll("#pagination button");
+            buttons.forEach(btn => btn.classList.remove("active"));
+            buttons[currentPage - 1].classList.add("active");
+        }
+
+        showPage(currentPage);
+        setupPagination();
+    });
+</script>
+
+}

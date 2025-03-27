@@ -1,0 +1,27 @@
+﻿@model OnlineLearning.Models.Momo.MomoExecuteResponseModel
+
+@{
+    ViewData["Title"] = "Home Page";
+    var postUrl = "tich-hop-thanh-toan-momo-voi-asp-net-core-7d5e4hP";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Thanh toán Momo với .NET Core, C# | LETEPE</h1>
+
+    <div class="container">
+        <h1 class="text-success">Thanh Toán Thành Công</h1>
+        <p>Order ID: <strong>@Model.OrderId</strong></p>
+        <p>Amount: <strong>@Model.Amount</strong></p>
+        <p>Order Info: <strong>@Model.OrderInfo</strong></p>
+    </div>
+    <div class="btn ">
+        <a class="btn btn-primary" href="/">Back to home</a>
+        <a class="btn btn-success" asp-controller="Lesson" asp-action="Index" asp-area="Mentee" asp-route-courseId="@Model.CourseId" >Go to course</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>

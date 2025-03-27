@@ -1,0 +1,225 @@
+﻿@using OnlineLearning.Models.DTOs
+@model RegisterDto
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+
+    <style>
+        .social{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+    </style>
+
+</head>
+@{
+	Layout = null;
+}
+
+<body>
+
+	<div class="container" id="container" data-active-form="@ViewData["activeForm"]">
+
+		@* register *@
+		    <div class="form-container sign-up-container">
+			    <form asp-controller="login" asp-action="register" method="post" id="signupForm">
+            <h1>Create Account</h1>
+
+
+            <input type="text" asp-for="FullName" placeholder="FullName"  />
+            <span style="color: black" class="text-danger" asp-validation-for="FullName"></span>
+
+
+            <input type="email" asp-for="Email" placeholder="Email" required />
+            <span style="color: black" class="text-danger" asp-validation-for="Email"></span>
+
+            <!-- Input Password với icon mắt -->
+            <div style="position: relative; width: 100%;">
+                <input type="password" id="password" asp-for="Password" placeholder="Password" required oninput="validatePassword()" />
+                <button type="button" onclick="togglePassword('password', 'eyeIcon1')" 
+                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;padding: 0;">
+                    <i id="eyeIcon1" class="fa fa-eye" style="color: black;font-size: 15px;"></i>
+                </button>
+            </div>
+
+
+            <span id="passwordError" style="color: black; font-size: 12px;"></span>
+            <span style="color: black" class="text-danger" asp-validation-for="Password"></span>
+
+            <!-- Input Confirm Password với icon mắt -->
+            <div style="position: relative; width: 100%;">
+                <input type="password" id="confirmPassword" asp-for="ConfirmPassword" placeholder="Re-enter Password" required oninput="validatePassword()" />
+                <button type="button" onclick="togglePassword('confirmPassword', 'eyeIcon2')"
+                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;padding: 0;">
+                    <i id="eyeIcon2" class="fa fa-eye" style="color: black; font-size: 15px;"></i>
+                </button>
+            </div>
+            <span id="confirmPasswordError" style="color: black; font-size: 12px;"></span>
+            <span style="color: black" class="text-danger" asp-validation-for="ConfirmPassword"></span>
+
+                <button type="submit" id="signUpButton" disabled style="margin-top: 15;background: #f17676">Sign Up</button>
+            </form>
+
+		</div>
+
+
+
+		@* login *@
+		<div class="form-container sign-in-container">
+			<form asp-controller="login" asp-action="login" method="post">
+				<h1>Sign in</h1>
+				<span>or use your account</span>
+				<input type="email" name="email" placeholder="Email" />
+				@* <input type="password" name="pswd" placeholder="Password" /> *@
+				<div style="position: relative; width: 100%;">
+					<input type="password" id="password3" name="pswd" placeholder="Password"/>
+					<button type="button" onclick="togglePassword('password3', 'eyeIcon3')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;padding: 0;">
+						<i id="eyeIcon3" class="fa fa-eye" style="color: black;font-size: 15px;"></i>
+					</button>
+				</div>
+				<a href="@Url.Action("ResetPassword", "Login")">Forgot your password?</a>
+                <button type="submit" style="background: #f17676">Sign In</button>
+                <a class="social" asp-controller="login" asp-action="LoginByGoogle">
+                    @* <div><img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="width: 30;margin-right: 8" /></div> *@
+                    @* <div class="tittleGoogle">Sign in with Google</div> *@
+                </a>
+			</form>
+
+
+		</div>
+
+		<div class="overlay-container">
+			<div class="overlay">
+                <div class="overlay-panel overlay-left" style=" background: #2bc5d4">
+					<h1>Welcome Back!</h1>
+					<p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn" style="background: #4b4949">
+                        Sign In
+                    </button>
+				</div>
+				<div style=" background: #2bc5d4"  class="overlay-panel overlay-right " >
+					<h1>Hello, Friend!</h1>
+					<p>Enter your personal details and start journey with us</p>
+                    <button class="ghost" id="signUp" style="background: #4b4949">Sign Up</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+
+<script>
+    function showToast(type, title, message) {
+        if (message.trim() !== "") {
+            iziToast[type]({
+                title: title,
+                message: message,
+                position: 'topRight',
+                timeout: 5000,
+                progressBar: true,
+                transitionIn: 'bounceInRight',
+                transitionOut: 'fadeOut'
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var successMessage = '@TempData["SuccessRegisterMessage"]';
+        if (successMessage) {
+            showToast('success', 'Success', successMessage);
+        }
+    });
+        document.addEventListener("DOMContentLoaded", function () {
+            var errorMessage = '@TempData["ErrorLogin"]';
+            if (errorMessage) {
+                showToast('error', 'Error', errorMessage);
+            }
+        });
+</script>
+
+
+
+	<script>
+				document.addEventListener("DOMContentLoaded", function () {
+			let container = document.getElementById("container");
+			let activeForm = container.dataset.activeForm; 
+			if (activeForm === "signup") {
+				container.classList.add("right-panel-active");
+			} else {
+				container.classList.remove("right-panel-active");
+			}
+			document.getElementById("signUp").addEventListener("click", function () {
+				container.classList.add("right-panel-active");
+			});
+			document.getElementById("signIn").addEventListener("click", function () {
+				container.classList.remove("right-panel-active");
+			});
+		});
+	</script>
+	<script>
+		function validatePassword() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    var errorSpan = document.getElementById("passwordError");
+    var confirmPasswordError = document.getElementById("confirmPasswordError");
+    var signUpButton = document.getElementById("signUpButton");
+
+    // Biểu thức chính quy kiểm tra mật khẩu: 8-32 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,32}$/;
+    var isValidPassword = regex.test(password);
+    var isMatching = password === confirmPassword;
+
+    if (password.length > 0 && !isValidPassword) {
+        errorSpan.textContent = "Từ 8 đến 32 ký tự\n" +
+                                "Có ít nhất 1 ký tự đặc biệt\n" +
+                                "Có ít nhất 1 chữ hoa, 1 chữ thường và 1 số";
+    } else {
+        errorSpan.textContent = "";
+    }
+
+    if (confirmPassword.length > 0 && !isMatching) {
+        confirmPasswordError.textContent = "Mật khẩu xác nhận không khớp.";
+    } else {
+        confirmPasswordError.textContent = "";
+    }
+
+    // Nếu tất cả điều kiện đều hợp lệ, bật nút SignUp
+    signUpButton.disabled = !(isValidPassword && isMatching);
+}
+
+function togglePassword(inputId, iconId) {
+    var passwordField = document.getElementById(inputId);
+    var eyeIcon = document.getElementById(iconId);
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
+
+// Ngăn form submit nếu nút bị vô hiệu hóa
+document.getElementById("signupForm").addEventListener("submit", function(event) {
+    if (document.getElementById("signUpButton").disabled) {
+        event.preventDefault(); // Ngăn form submit nếu chưa hợp lệ
+    }
+});
+
+	</script>
+
+</body>
+</html>
