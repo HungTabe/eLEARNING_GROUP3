@@ -1,0 +1,176 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@* @model YourNamespace.CreateQuestionViewModel *@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Create Questions</title>
+    <!-- Thêm Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <style>
+        .delete-button {
+            background-color: #f44336; /* Red background */
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .delete-button img {
+                width: 24px; /* Adjust the size as needed */
+                height: 24px; /* Adjust the size as needed */
+            }
+
+            .delete-button:hover {
+                background-color: #d32f2f; /* Darker red on hover */
+            }
+
+            .delete-button:focus {
+                outline: none; /* Remove the default focus outline */
+            }
+
+        .question-number {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .answer {
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+
+            .answer.correct {
+                color: #ffffff;
+                background-color: #28a745;
+            }
+
+            .answer.incorrect {
+                color: #333333;
+                background-color: #f8f9fa;
+            }
+
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-heading h2" style="margin-top: 10px;">Create Questions</h1>
+
+        <!-- Nút Download Template và Import Question -->
+        @* <div class="card-header bg-white buttons-container">
+            <a asp-action="Download" asp-controller="Question" id="downloadTemplateQuiz" class="btn btn-success">
+                Download Template</a>
+            <a href="#" id="importQuestionBtn" class="btn btn-success">Import Question</a>
+        </div> *@
+
+        <form id="addQuizForm">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Questions</h4>
+                </div>
+
+                @* Lặp qua danh sách các câu hỏi *@
+               @*  @foreach (var question in Model.ListQuestions)
+                {
+                    <div class="nestable" id="nestable">
+                        <ul class="list-group list-group-fit nestable-list-plain mb-0">
+                            <li class="list-group-item nestable-item">
+                                <div class="media">
+                                    <div class="media-body media-middle">
+                                        <p class="question-number"
+                                           data-question-id="@question.QuestionId"
+                                           data-question-name="@question.QuestionName"
+                                           data-question-num="@question.QuestionNum">
+                                            @question.QuestionNum. @question.QuestionName
+                                        </p>
+                                        @foreach (var answer in Model.ListAnswers.Where(a => a.QuestionId == question.QuestionId))
+                                        {
+                                            <div class="answer @(answer.IsCorrect ? "correct" : "incorrect")"
+                                                 data-answer-choice="@answer.Choices"
+                                                 data-is-correct="@answer.IsCorrect">
+                                                @answer.Choices<br />
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="media-right text-right">
+                                        <div>
+                                            <a class="btn btn-primary" data-toggle="modal" data-target="#editQuestionModal"
+                                               onclick="editQuestionModal(this, @question.QuestionId)">Edit</a>
+                                            <a class="btn btn-danger" data-toggle="modal" data-target="#delete-question-modal"
+                                               onclick="deleteQuestionModal(@question.QuestionId)">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                }
+ *@
+                <div class="card-header bg-white buttons-container">
+                    <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success">Add Question</a>
+                    @* <a asp-controller="ModuleManage" asp-action="Index" asp-route-moduleId="@Model.MidCreate" asp-route-cid="@Model.CidCreate" class="btn btn-primary">Done</a> *@
+                </div>
+            </div>
+        </form>
+
+        @* <form asp-action="Import" method="post" enctype="multipart/form-data" class="upload-form" style="display: none;">
+            <input type="file" id="file-upload" name="file" accept=".xlsx" />
+            <input type="hidden" name="midCreate" value="@Model.MidCreate" />
+            <input type="hidden" name="cidCreate" value="@Model.CidCreate" />
+        </form> *@
+    </div>
+
+    @await Html.PartialAsync("_CreateQuestions")
+
+    @* Nếu cần sử dụng script cho việc upload file, hãy bỏ comment và điều chỉnh theo nhu cầu *@
+    
+    <!-- Thêm jQuery và Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.getElementById('importQuestionBtn').addEventListener('click', function() {
+            document.getElementById('file-upload').click();
+        });
+
+        document.getElementById('file-upload').addEventListener('change', function(event) {
+            const fileInput = event.target;
+            const file = fileInput.files[0];
+            const errorMessage = document.getElementById('error-message');
+
+            if (!file) {
+                errorMessage.textContent = 'No file uploaded or file is empty';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (file.size === 0) {
+                errorMessage.textContent = 'No file uploaded or file is empty';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (file.name !== 'Create_Question_Template.xlsx') {
+                errorMessage.textContent = 'Please Download File Create_Question_Template First, Fill Information And Import';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            errorMessage.style.display = 'none';
+            document.querySelector('.upload-form').submit();
+        });
+    </script>
+   
+</body>
+</html>

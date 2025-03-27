@@ -1,0 +1,74 @@
+@using OnlineLearning.Models.DTOs
+@model QuizDTO
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<html>
+<head>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-heading h2" style="margin-top: 10px;">Create A New Quiz</h1>
+        <form asp-controller="quiz" id="addQuizForm" asp-action="CreateQuiz" method="post">
+            <input type="hidden" name="ModuleId" value="2" />
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"></h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row mb-5">
+                        <label for="quizTitle" class="col-md-3 col-form-label">Quiz Title:</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2" asp-for="QuizName" id="QuizName" wfd-id="id0">
+                                <br/>
+                                <span style="color: black" class="text-danger" asp-validation-for="QuizName"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-5">
+                        <label for="time_toggle" class="col-sm-3 col-form-label">Timeframe:</label>
+                        <div class="col-sm-9">
+                            <div class="d-flex flex-row">
+                                <div class="form-group" style="margin-right: 10px; margin-top: 10px">
+                                    <input type="number" min="1" class="form-control text-center" asp-for="QuizTime" id="QuizTime" style="width: 70px;" wfd-id="id1">
+                                    <span style="color: black" class="text-danger" asp-validation-for="QuizTime"></span>
+                                    <div id="timeNumberError" class="error"></div>
+                                </div>
+                                <div class="form-group" style="margin-right: 10px; margin-top: 10px">
+                                    <select class="form-select" name="TimeUnit">
+                                        <option value="minutes" selected="">Minutes</option>
+                                        <option value="seconds">Seconds</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label for="quizScore" class="col-sm-3 col-form-label">Pass Score:</label>
+                        <div class="col-sm-9">
+                            <div class="form-inline">
+                                <div class="form-group" style="margin-right: 10px;">
+                                    <input type="number" min="1" max="10" class="form-control text-center" asp-for="PassScore" id="PassScore" style="width: 70px;" wfd-id="id2">
+                                    <span style="color: black" class="text-danger" asp-validation-for="PassScore"></span>
+                                    <div id="quizScoreError" class="error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="">
+                        <input type="submit" name="AddQuiz" value="Add Quiz" class="btn btn-success" style="width: 127.6px;">
+                    </div>
+                    <div style="">
+                        <a href="" class="btn btn-danger">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

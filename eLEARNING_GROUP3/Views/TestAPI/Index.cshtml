@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "TEST API";
+}
+
+<div class="text-center container">
+    <h1 class="display-4">
+        @{
+            var fullName = Context.Session.GetString("FullName");
+        }
+        @if (!string.IsNullOrEmpty(fullName))
+        {
+            <p>Welcome, @fullName!</p>
+        }
+        else
+        {
+            <p>Welcome, Guest!</p>
+        }
+    </h1>
+
+    <h1 class="my-2">Navigation</h1>
+    <div class="d-flex justify-content-between container">
+        <div class="d-flex flex-column">
+            <h3>Test</h3>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="User" asp-action="Index">List User</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="Home" asp-action="Index">Home</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></div>
+        </div>
+        <div class="d-flex flex-column">
+            <h3>Hung</h3>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="Login" asp-action="Index">Login</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="Home" asp-action="Index">Chatbot</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="Admin" asp-controller="AITraining" asp-action="Index">AI Training</a></div>
+
+        </div>
+        <div class="d-flex flex-column">
+            <h3>Dai</h3>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="Admin" asp-controller="FAQs" asp-action="Index">FAQ</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="Mentor" asp-controller="Course" asp-action="Index">CRUD Course</a></div>
+        </div>
+        <div class="d-flex flex-column">
+            <h3>Hau</h3>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="Profile" asp-action="Index">Profile(+change pass)</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="Course" asp-action="DetailsCourse" asp-route-id="1">View Course Detail + Mentee lesson</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="Mentor" asp-controller="LessonQuiz" asp-action="Index" asp-route-moduleNumber="1" asp-route-moduleName="Introduction to Course" asp-route-courseId="1">Update+Delete Lesson</a></div>
+        </div>
+        <div class="d-flex flex-column">
+            <h3>Sang</h3>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="" asp-controller="" asp-action="">Button</a></div>
+        </div>
+        <div class="d-flex flex-column">
+            <h3>Sang</h3>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="Admin" asp-controller="Dashboard" asp-action="payWithMomo">Payment with MOMO</a></div>
+            <div class="my-2"><a class="btn btn-outline-primary" asp-area="Mentee" asp-controller="CourseProgress" asp-action="index">My coure progress</a></div>
+        </div>
+    </div>
+
+</div>

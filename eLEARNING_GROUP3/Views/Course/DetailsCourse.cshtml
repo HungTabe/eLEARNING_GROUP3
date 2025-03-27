@@ -1,0 +1,137 @@
+@model CourseDetailDTO
+@using System.Globalization
+@{
+	ViewData["Title"] = Model.Course.CourseName;
+}
+
+<div class="container py-5">
+	<div class="row">
+		<!-- Course Details -->
+		<div class="col-lg-8">
+			<div class="mb-5">
+				<h6 class="text-uppercase text-danger pb-2">Course Detail</h6>
+				<h1 class="display-4 fw-bold">@Model.Course.CourseName</h1>
+				<img src="@Model.Course.CourseImageUrls" alt="Course Image" class="img-fluid rounded mb-4" style="height: 480px; object-fit: cover; border-radius: 10px;">
+				<p class="lead">@Model.Course.Description</p>
+			</div>
+
+			<!-- RELATED COURSES -->
+			@if (Model.RelatedCourses.Any())
+			{
+				<h2 class="mb-3">Related Courses</h2>
+				<div class="row">
+					@foreach (var course in Model.RelatedCourses)
+					{
+						<div class="col-md-6 mb-4">
+							<div class="card border-0 shadow-sm">
+								<img src="@course.Image" class="card-img-top" alt="Course Image" style="height: 200px; object-fit: cover;">
+								<div class="card-body text-center">
+									<h5 class="card-title">@course.CourseName</h5>
+									<p class="text-muted">@course.Price₫</p>
+									<div class="mb-2">
+										@for (int i = 1; i <= 5; i++)
+										{
+											<i class="fa fa-star @(i <= course.AvgRating ? "text-warning" : "text-secondary")"></i>
+										}
+										<small>(@course.SumOfRating reviews)</small>
+									</div>
+									<a href="/Course/DetailCourse/@course.CourseId" class="btn btn-outline-primary btn-sm">Read More</a>
+									<a href="/Course/Enroll?cid=@course.CourseId" class="btn btn-primary btn-sm">Join Now</a>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			}
+			<!-- RELATED COURSES -->
+		</div>
+
+		<!-- COURSE FEATURES -->
+		<div class="col-lg-4">
+			<div class="card text-white bg-primary mb-4 shadow-sm">
+				<div class="card-header text-center fw-bold">Course Features</div>
+				<div class="card-body">
+					<p><strong>Instructor:</strong> @Model.Course.CreatorUser.FullName</p>
+					<p>
+						<strong>Rating:</strong>
+						@for (int i = 1; i <= 5; i++)
+						{
+							<i class="fa fa-star @(i <= Model.AvgRating ? "text-warning" : "text-secondary")"></i>
+						}
+					</p>
+					<p><strong>Lectures:</strong> @Model.Lecture</p>
+					<p><strong>Duration:</strong> @Model.Course.StudyTime</p>
+					<p><strong>Skill Level:</strong> @Model.Course.Level.LevelName</p>
+					<p><strong>Language:</strong> @Model.Course.Language.LanguageName</p>
+					<h4 class="text-white text-center mt-3">
+						Price: $@Model.Course.Price
+					</h4>
+					<div class="text-center mt-3">
+						@if (ViewBag.checkPurchase)
+						{
+							<a class="btn btn-light btn-lg"
+							   asp-area="Mentee"
+							   asp-controller="Lesson"
+							   asp-action="Index"
+							   asp-route-courseId="@Model.Course.CourseId">Enroll Now</a>
+						}
+						else
+						{
+							<a class="btn btn-light btn-lg"
+							   asp-area="Mentee"
+							   asp-controller="Lesson"
+							   asp-action="Index"
+							   asp-route-courseId="@Model.Course.CourseId">Purchase</a>
+						}
+					</div>
+					
+					<!-- Nút Chat với Mentor -->
+					<div class="text-center mt-3">
+						<a class="btn btn-outline-light"
+						   asp-controller="Chat"
+						   asp-action="ChatWithMentor"
+						   asp-route-mentorId="@Model.Course.Creator">
+							<i class="fas fa-comments me-1"></i> Chat với Mentor
+						</a>
+					</div>
+				</div>
+			</div>
+			<!-- COURSE FEATURES -->
+		</div>
+
+		<!-- Reviews Section -->
+		<div class="mt-5">
+			<h3 class="mb-4">COURSE REVIEWS</h3>
+			<div class="d-flex align-items-center mb-3">
+				<span class="fs-4 fw-bold me-3">@Model.AvgRating/5</span>
+				<div>
+					@for (int i = 1; i <= 5; i++)
+					{
+						<i class="fa fa-star @(i <= Model.AvgRating ? "text-warning" : "text-secondary")"></i>
+					}
+				</div>
+				<small class="ms-3">(@Model.AvgRating reviews)</small>
+			</div>
+
+			<!-- Review List -->
+			<div class="list-group">
+				@foreach (var rating in Model.courseRatings)
+				{
+					<div class="list-group-item d-flex">
+						<img src="" alt="User Avatar" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+						<div>
+							<h5 class="mb-1">@rating.User.FullName</h5>
+							<small class="text-muted">@rating.CreatedAt</small>
+							<div>
+								@for (int i = 1; i <= 5; i++)
+								{
+									<i class="fa fa-star @(i <= rating.Rating ? "text-warning" : "text-secondary")"></i>
+								}
+							</div>
+							<p class="mt-2">@rating.Feedback</p>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
