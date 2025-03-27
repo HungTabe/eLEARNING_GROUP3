@@ -1,0 +1,36 @@
+# .NET Core
+## User-specific files
+.idea/
+.vs/
+.vscode/
+# User-specific files for Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]eploy/
+[Dd]ebug-*/ 
+[Dd]eploy-*/ 
+[Dd]ist-*/
+obj/
+bin/
+
+# ASP.NET Core
+wwwroot/
+node_modules/
+
+# User-specific files
+.vscode/
+
+# ASP.NET Core Web App
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+
+# Entity Framework
+migrations/
