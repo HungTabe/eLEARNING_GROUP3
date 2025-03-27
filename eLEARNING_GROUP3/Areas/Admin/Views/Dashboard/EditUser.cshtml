@@ -1,0 +1,115 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+@model Admin_AddUserDto
+
+<div class="pc-content">
+    <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-sm-between">
+            <h5>Edit User</h5>
+            <div id="avatarPreview" class="mt-2">
+                @if (!string.IsNullOrEmpty(Model.Avatar_str))
+                {
+                    <img src="@Model.Avatar_str" alt="Current Avatar" />
+                }
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-controller="Dashboard" asp-action="EditUser" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+
+                <div class="row">
+                    <!-- Cột 1 -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" asp-for="Fullname" class="form-control" id="fullName" placeholder="Enter full name" oninput="validateFullName()">
+                            <span asp-validation-for="Fullname" class="text-danger"></span>
+                            <div id="fullNameError" class="err" style="color: red"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" asp-for="Email" class="form-control" id="email" placeholder="Enter email" oninput="validateEmail()">
+                            <div id="emailError" class="err" style="color: red"></div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            @if (ViewData["EmailExist"] != null)
+                            {
+                                <div class="err" style="color: red">@ViewData["EmailExist"]</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" asp-for="Password" class="form-control" id="password" placeholder="Enter password" oninput="validatePassword()">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <div id="passwordError" class="err" style="color: red"></div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="avatar" class="form-label">Avatar</label>
+                            <input type="file" asp-for="Avatar" class="form-control" id="avatar" accept=".jpg,.jpeg,.png" onchange="previewAvatar()">
+                            <span asp-validation-for="Avatar" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Cột 2 -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" asp-for="Phone" class="form-control" id="phone" placeholder="Enter phone number" oninput="validatePhone()">
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                            <div id="phoneError" class="err" style="color: red"></div>
+                            @if (ViewData["PhoneExist"] != null)
+                            {
+                                <div class="err" style="color: red">@ViewData["PhoneExist"]</div>
+                            }
+                            @if (ViewData["PhoneErr"] != null)
+                            {
+                                <div class="err" style="color: red">Lỗi định dạng số điện thoại</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Gender" class="form-label">Gender</label>
+                            <select asp-for="Gender" class="form-select" id="gender" onchange="validateGender()">
+                                <option value="" selected>Select gender</option>
+                                <option value="true">Male</option>
+                                <option value="false">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                            <div id="genderError" class="err" style="color: red"></div>
+
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="dob" class="form-label">Date of Birth</label>
+                            <input type="date" asp-for="Dob" class="form-control" id="dob" onchange="validateDob()">
+                            <div id="dobError" class="err" style="color: red"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select asp-for="RoleId" asp-items="@(new SelectList(ViewBag.Roles, "RoleId", "RoleName"))" class="form-select" id="role" onchange="validateRole()">
+                                <option value="" selected>Select role</option>
+
+                            </select>
+                            <span asp-validation-for="RoleId" class="text-danger"></span>
+                            <div id="roleError" class="err" style="color: red"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nút submit -->
+                <div class="text-center mt-3">
+                    <button type="submit" id="submitButton" class="btn btn-primary">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
