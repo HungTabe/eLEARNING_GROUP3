@@ -1,0 +1,560 @@
+﻿@using OnlineLearning.Models.Domains.CourseModels
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"] - OnlineLearning</title>
+    <!-- [Meta] -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description"
+          content="Datta able is trending dashboard template made using Bootstrap 5 design framework. Datta able is available in Bootstrap, React, CodeIgniter, Angular,  and .net Technologies." />
+    <meta name="keywords"
+          content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard" />
+    <meta name="author" content="Codedthemes" />
+
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="~/admin/assets/images/favicon.svg" type="image/x-icon" />
+    <!-- [Font] Family -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="~/assets/fonts/tabler-icons.min.css" />
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="~/admin/assets/fonts/feather.css" />
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="~/admin/assets/fonts/fontawesome.css" />
+    @* <!-- [Material Icons] https://fonts.google.com/icons --> *@
+    <link rel="stylesheet" href="~/admin/assets/fonts/material.css" />
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="~/admin/assets/css/style.css" id="main-style-link" />
+    <link rel="stylesheet" href="~/admin/assets/css/style-preset.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="~/admin/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="~/admin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        .card-header {
+            padding: 10px 20px;
+        }
+        #avatarPreview {
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            #avatarPreview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Giữ tỷ lệ ảnh, cắt phần thừa */
+            }
+
+        @@media (max-width: 768px) {
+            #avatarPreview img {
+                max-width: 150px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            #avatarPreview img {
+                max-width: 100px;
+            }
+        }
+
+        .icon {
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+
+
+
+<!-- [Head] end -->
+<!-- [Body] Start -->
+
+<body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+    <!-- [ Sidebar Menu ] start -->
+    <nav class="pc-sidebar">
+        <div class="navbar-wrapper">
+            <div class="m-header">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="b-brand text-primary">
+                    <!-- ========   Change your logo from here   ============ -->
+                    <img src="~/admin/assets/images/logo-white.svg" class="img-fluid logo-lg" alt="logo" />
+                </a>
+            </div>
+            <div class="navbar-content">
+                <ul class="pc-navbar">
+                    <li class="pc-item pc-caption">
+                        <label>Navigation</label>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-controller="Dashboard" asp-action="Index" class="pc-link">
+                            <span class="pc-micon">
+                                <i data-feather="home"></i>
+                            </span>
+                            <span class="pc-mtext">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="pc-item pc-caption">
+                        <label>User Management</label>
+                        <i data-feather="feather"></i>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-controller="Dashboard" asp-action="AddUser" class="pc-link">
+                            <span class="pc-micon"><i data-feather="user"></i></span>
+                            <span class="pc-mtext">Add user</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-controller="Dashboard" asp-action="ListUser" class="pc-link">
+                            <span class="pc-micon"><i data-feather="users"></i></span>
+                            <span class="pc-mtext">View list user</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-action="payWithMomo" asp-controller="Dashboard" class="pc-link">
+                            <span class="pc-micon"><i data-feather="feather"></i></span>
+                            <span class="pc-mtext">Payment TEST</span>
+                        </a>
+                    </li>
+                    <li class="pc-item pc-caption">
+                        <label>Courses</label>
+                        <i data-feather="monitor"></i>
+                    </li>
+                    <li class="pc-item">
+                        <a  asp-controller="ReviewCourse" asp-action="Index"  class="pc-link">
+                            <span class="pc-micon"><i data-feather="lock"></i></span>
+                            <span class="pc-mtext">Review course</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a href="../pages/register-v1.html" target="_blank" class="pc-link">
+                            <span class="pc-micon"><i data-feather="user-plus"></i></span>
+                            <span class="pc-mtext">...</span>
+                        </a>
+                    </li>
+                    <li class="pc-item pc-caption">
+                        <label>Other</label>
+                        <i data-feather="sidebar"></i>
+                    </li>
+                    <li class="pc-item pc-hasmenu">
+                        <a href="#!" class="pc-link">
+                            <span class="pc-micon">
+                                <i data-feather="align-right"></i>
+                            </span>
+                            <span class="pc-mtext">Menu levels</span><span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="#!">Level 2.1</a></li>
+                            <li class="pc-item pc-hasmenu">
+                                <a href="#!" class="pc-link">
+                                    Level 2.2<span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                                </a>
+                                <ul class="pc-submenu">
+                                    <li class="pc-item"><a class="pc-link" href="#!">Level 3.1</a></li>
+                                    <li class="pc-item"><a class="pc-link" href="#!">Level 3.2</a></li>
+                                    <li class="pc-item pc-hasmenu">
+                                        <a href="#!" class="pc-link">
+                                            Level 3.3<span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                                        </a>
+                                        <ul class="pc-submenu">
+                                            <li class="pc-item"><a class="pc-link" href="#!">Level 4.1</a></li>
+                                            <li class="pc-item"><a class="pc-link" href="#!">Level 4.2</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="pc-item pc-hasmenu">
+                                <a href="#!" class="pc-link">
+                                    Level 2.3<span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                                </a>
+                                <ul class="pc-submenu">
+                                    <li class="pc-item"><a class="pc-link" href="#!">Level 3.1</a></li>
+                                    <li class="pc-item"><a class="pc-link" href="#!">Level 3.2</a></li>
+                                    <li class="pc-item pc-hasmenu">
+                                        <a href="#!" class="pc-link">
+                                            Level 3.3
+                                            <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                                        </a>
+                                        <ul class="pc-submenu">
+                                            <li class="pc-item"><a class="pc-link" href="#!">Level 4.1</a></li>
+                                            <li class="pc-item"><a class="pc-link" href="#!">Level 4.2</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="pc-item">
+                        <a href="../other/sample-page.html" class="pc-link">
+                            <span class="pc-micon"><i data-feather="sidebar"></i></span>
+                            <span class="pc-mtext">Sample page</span>
+                        </a>
+                    </li>
+
+                </ul>
+                <div class="card pc-user-card my-3 bg-white bg-opacity-10">
+                    <div class="card-body text-center">
+                        <img src="../assets/images/application/img-coupon.png" alt="img" class="img-fluid w-50" />
+                        <h5 class="mb-0 text-white mt-1">Datta Able</h5>
+                        <p class="text-white">Checkout pro features</p>
+                        <a href="https://codedthemes.com/item/datta-able-bootstrap-admin-template/" target="_blank" class="btn btn-warning">
+                            <svg class="pc-icon me-2">
+                                <use xlink:href="#custom-logout-1-outline"></use>
+                            </svg>
+                            Upgrade to Pro
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- [ Sidebar Menu ] end -->
+    <!-- [ Header Topbar ] start -->
+    <header class="pc-header">
+        <div class="header-wrapper">
+            <!-- [Mobile Media Block] start -->
+            <div class="me-auto pc-mob-drp">
+                <ul class="list-unstyled">
+                    <!-- ======= Menu collapse Icon ===== -->
+                    <li class="pc-h-item pc-sidebar-collapse">
+                        <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                            <i data-feather="menu"></i>
+                        </a>
+                    </li>
+                    <li class="pc-h-item pc-sidebar-popup">
+                        <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
+                            <i data-feather="menu"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown pc-h-item">
+                        <a class="pc-head-link dropdown-toggle arrow-none m-0 trig-drp-search"
+                           data-bs-toggle="dropdown"
+                           href="#"
+                           role="button"
+                           aria-haspopup="false"
+                           aria-expanded="false">
+                            <i data-feather="search"></i>
+                        </a>
+                        <div class="dropdown-menu pc-h-dropdown drp-search">
+                            <form class="px-3 py-2">
+                                <input type="search" class="form-control border-0 shadow-none" placeholder="Search here. . ." />
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- [Mobile Media Block end] -->
+            <div class="ms-auto">
+                <ul class="list-unstyled">
+                    @* Thông báo ở đây *@
+
+                    <li class="dropdown pc-h-item">
+                        <a class="pc-head-link dropdown-toggle arrow-none me-0"
+                           data-bs-toggle="dropdown"
+                           href="#"
+                           role="button"
+                           aria-haspopup="false"
+                           aria-expanded="false">
+                            <i data-feather="bell"></i>
+                            <span class="badge bg-success pc-h-badge">
+                                @(ViewBag.NotificationsCount != null ? ViewBag.NotificationsCount : 0)
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
+                            <div class="dropdown-header d-flex align-items-center justify-content-between">
+                                <h5 class="m-0">Notifications</h5>
+                                <a href="#!" class="btn btn-link btn-sm">Mark all read</a>
+                            </div>
+                            <div class="dropdown-body text-wrap header-notification-scroll position-relative" style="max-height: calc(100vh - 215px)">
+                                @{
+                                    var notifications = (IEnumerable<Notification>)ViewBag.Notifications ?? Enumerable.Empty<Notification>();
+
+                                    // Phân loại thông báo theo ngày
+                                    var groupedNotifications = notifications
+                                    .OrderByDescending(n => n.CreatedAt)
+                                    .GroupBy(n => (DateTime.Today - n.CreatedAt.Date).Days);
+
+                                    foreach (var group in groupedNotifications)
+                                    {
+                                        var dayLabel = group.Key switch
+                                        {
+                                            0 => "Today",
+                                            1 => "Yesterday",
+                                            _ => $"{group.Key} days ago"
+                                        };
+
+                                        <p class="text-span" data-date="@dayLabel">@dayLabel</p>
+
+                                        foreach (var notification in group)
+                                        {
+                                            var diffMinutes = (int)(DateTime.Now - notification.CreatedAt).TotalMinutes;
+                                            var timeAgo = diffMinutes < 1 ? "Just now" : $"{diffMinutes} min ago";
+
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <div class="flex-shrink-0">
+                                                            <img class="img-radius avtar rounded-0" src="@notification.CourseUrl" alt="Course image" />
+                                                        </div>
+                                                        
+
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <span class="float-end text-sm text-muted">@timeAgo</span>
+                                                            
+                                                            <small class="text-muted d-block mb-1">Add Course
+                                                            </small>
+                                                            <h5 class="text-body mb-2">
+                                                                <a href="/Admin/ReviewCourse/Detail/@notification.CourseId"
+                                                                   class="notification-item"
+                                                                   data-course-id="@notification.CourseId">@notification.CourseName</a>
+                                                               
+                                                            </h5>
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            @if (notification.IsRead == true)
+                                                            {
+                                                                <i class="fas fa-circle text-success f-10 m-l-15"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="fas fa-circle text-danger f-10 m-l-15"></i>
+
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            </div>
+                            <div class="text-center py-2">
+                                <a href="#!" class="link-danger">Clear all Notifications</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="dropdown pc-h-item header-user-profile">
+                        <a class="pc-head-link dropdown-toggle arrow-none me-0"
+                           data-bs-toggle="dropdown"
+                           href="#"
+                           role="button"
+                           aria-haspopup="false"
+                           data-bs-auto-close="outside"
+                           aria-expanded="false">
+                            <i data-feather="user"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown p-0 overflow-hidden">
+                            <div class="dropdown-header d-flex align-items-center justify-content-between bg-primary">
+              
+                                <div class="d-flex my-2">
+                                    <div class="flex-shrink-0">
+                                        <img src="@ViewBag.User.AvatarUrl" alt="user-image" class="user-avtar wid-35" />
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="text-white mb-1">@ViewBag.User.FullName 🖖</h6>
+                                        <span class="text-white text-opacity-75">@ViewBag.User.Email</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="dropdown-body">
+                                <div class="profile-notification-scroll position-relative" style="max-height: calc(100vh - 225px)">
+@*                                      <a href="#" class="dropdown-item">
+                                         <span>
+                                             <svg class="pc-icon text-muted me-2">
+                                                 <use xlink:href="#custom-setting-outline"></use>
+                                             </svg>
+                                             <span>Settings</span>
+                                         </span>
+                                     </a>
+                                     <a href="#" class="dropdown-item">
+                                         <span>
+                                             <svg class="pc-icon text-muted me-2">
+                                                 <use xlink:href="#custom-share-bold"></use>
+                                             </svg>
+                                             <span>Share</span>
+                                         </span>
+                                     </a>
+                                     <a href="#" class="dropdown-item">
+                                         <span>
+                                             <svg class="pc-icon text-muted me-2">
+                                                 <use xlink:href="#custom-lock-outline"></use>
+                                             </svg>
+                                             <span>Change Password</span>
+                                         </span>
+                                     </a> *@
+                                    <div class="d-grid my-2">
+                                        <a asp-controller="Login" asp-action="Logout" class="btn btn-primary">
+                                            <svg class="pc-icon me-2">
+                                                <use xlink:href="#custom-logout-1-outline"></use>
+                                            </svg>Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!-- [ Header ] end -->
+    <!-- [ Main Content ] start -->
+    <div class="pc-container">
+        @RenderBody()
+
+    </div>
+    <!-- [ Main Content ] end -->
+    <footer class="pc-footer">
+        <div class="footer-wrapper container-fluid">
+            <div class="row">
+                <div class="col my-1">
+                    <p class="m-0">Datta able &#9829; crafted by Team <a href="https://codedthemes.com/" target="_blank">Codedthemes</a></p>
+                </div>
+                <div class="col-auto my-1">
+                    <ul class="list-inline footer-link mb-0">
+                        <li class="list-inline-item"><a href="../index.html">Home</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="~/admin/js/validate-add-user.js">
+    </script>
+
+    <!-- [Page Specific JS] start -->
+    <!-- apexcharts js -->
+    <script src="~/admin/assets/js/plugins/apexcharts.min.js"></script>
+
+    <script src="~/admin/assets/js/plugins/jsvectormap.min.js"></script>
+    <script src="~/admin/assets/js/plugins/world.js"></script>
+
+    <script src="~/admin/assets/js/pages/dashboard-default.js"></script>
+    <!-- [Page Specific JS] end -->
+    <!-- Required Js -->
+    <script src="~/admin/assets/js/plugins/popper.min.js"></script>
+    <script src="~/admin/assets/js/plugins/simplebar.min.js"></script>
+    <script src="~/admin/assets/js/plugins/bootstrap.min.js"></script>
+    <script src="~/admin/assets/js/fonts/custom-font.js"></script>
+    <script src="~/admin/assets/js/script.js"></script>
+    <script src="~/admin/assets/js/theme.js"></script>
+    <script src="~/admin/assets/js/plugins/feather.min.js"></script>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/admin/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="~/admin/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/admin/js/demo/datatables-demo.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <!-- Script xử lý -->
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/courseNotificationHub")
+            .build();
+
+        connection.on("ReceiveCourseNotification", function (course) {
+            const createdAt = new Date(course.createdAt);
+            const now = new Date();
+            const diffDays = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
+
+            let dayLabel = diffDays === 0
+                ? "Today"
+                : diffDays === 1
+                    ? "Yesterday"
+                    : `${diffDays} days ago`;
+
+            const notificationHtml = `
+                <div class="card mb-0">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <img class="img-radius avtar rounded-0" src="${course.courseUrl}" alt="Course image" />
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <span class="float-end text-sm text-muted">${diffDays === 0 ? "Just now" : `${diffDays} min ago`}</span>
+                                        <small class="text-muted d-block mb-1">Add Course</small>
+                                <h5 class="text-body mb-2">
+                                    <a href="/Admin/ReviewCourse/Detail/${course.courseId}"
+                                       class="notification-item"
+                                       data-course-id="${course.courseId}">${course.courseName}</a>
+                                </h5>
+
+                            </div> 
+                            <div class="flex-shrink-0">
+                                 <i class="fas fa-circle text-danger f-10 m-l-15"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            const dropdownBody = document.querySelector(".dropdown-body");
+            let daySection = dropdownBody.querySelector(`p[data-date='${dayLabel}']`);
+
+            if (!daySection) {
+                dropdownBody.insertAdjacentHTML("beforeend", `<p class="text-span" data-date="${dayLabel}">${dayLabel}</p>`);
+                daySection = dropdownBody.querySelector(`p[data-date='${dayLabel}']`);
+            }
+
+            daySection.insertAdjacentHTML("afterend", notificationHtml);
+
+            updateNotificationCount(1); // Tăng số lượng thông báo lên 1
+        });
+
+
+        // connection.on("UpdateNotificationCount", (newCount) => {
+        //     const badge = document.querySelector(".pc-h-badge");
+        //     badge.textContent = newCount; Cập nhật state cho giao diện
+        // });
+
+        // Hàm cập nhật số lượng thông báo
+        function updateNotificationCount(change) {
+            const badge = document.querySelector(".pc-h-badge");
+            const currentCount = parseInt(badge.textContent) || 0;
+            badge.textContent = Math.max(0, currentCount + change);
+        }
+
+        connection.start().then(() => console.log("SignalR connected"))
+            .catch(err => console.error("SignalR connection error:", err));
+
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+</body>
+<!-- [Body] end -->
+</html>
