@@ -1,0 +1,215 @@
+﻿@model CourseDetailDTO
+@using OnlineLearning.Models.Domains.CourseModels.LessonModels
+
+@{
+	Layout = "_Layout";
+	Lesson currentLesson = null;
+
+	// Kiểm tra nếu Model.Modules không rỗng thì gán giá trị cho currentLesson
+	if (Model.Modules != null && Model.Modules.Any())
+	{
+		currentLesson = Model.Modules
+			.SelectMany(m => m.Lessons)
+			.FirstOrDefault(l => l.LessonId == ViewBag.LessonId);
+	}
+
+	string videoUrl = currentLesson?.LessonVideo ?? "";
+	string embedUrl = "";
+
+	if (!string.IsNullOrEmpty(videoUrl))
+	{
+		var youtubeRegex = new System.Text.RegularExpressions.Regex(@"(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)");
+		var match = youtubeRegex.Match(videoUrl);
+
+		if (match.Success)
+		{
+			embedUrl = $"https://www.youtube.com/embed/{match.Groups[1].Value}";
+		}
+	}
+}
+
+<!-- MENTEE LESSON -->
+<div class="container mt-5">
+	<h1 class="page-heading text-primary fw-bold">@Model.Course.CourseName</h1>
+	@if (Model.Modules == null || !Model.Modules.Any())
+	{
+		<div class="card shadow-sm border-0 mt-4">
+			<div class="card-body text-center py-5">
+				<i class="fa fa-book-open text-secondary" style="font-size: 3rem;"></i>
+				<h4 class="text-muted mt-3">Hiện chưa có bài học nào.</h4>
+				<p class="text-secondary">Vui lòng quay lại sau khi nội dung được cập nhật.</p>
+			</div>
+		</div>
+	}
+	else
+	{
+		<div class="row">
+			<!-- VIDEO + NỘI DUNG -->
+			<div class="col-lg-8">
+				<div class="card shadow-sm rounded-lg">
+					<div class="ratio ratio-16x9">
+						<iframe id="lessonVideo" class="embed-responsive-item"
+								src="@embedUrl"
+								title="Lesson Video"
+								frameborder="0"
+								allowfullscreen>
+						</iframe>
+					</div>
+					<div class="card-body">
+						<h4 class="fw-bold text-primary">@(currentLesson?.LessonName ?? "No Lesson Selected")</h4>
+						<p class="text-secondary">@(currentLesson?.LessonContent ?? "No content available.")</p>
+					</div>
+				</div>
+
+				<!-- BÌNH LUẬN -->
+				<div class="card mt-4 shadow-sm rounded-lg">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0 text-white">Bình luận</h5>
+					</div>
+					<div class="card-body">
+						<form method="post" class="d-flex">
+							<img src="#" alt="User Avatar" class="avatar rounded-circle me-2" width="40">
+							<textarea name="Content" rows="1" class="form-control me-2" placeholder="Thêm bình luận..."></textarea>
+							<button type="submit" class="btn btn-primary">Gửi</button>
+						</form>
+						<div class="comment-list mt-3">
+							<!-- Danh sách bình luận -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- DANH SÁCH MODULE + BÀI HỌC -->
+			<div class="col-lg-4">
+				<div class="card shadow-sm rounded-lg">
+					<div class="card-body">
+						<h3 class="text-primary fw-bold">DANH SÁCH BÀI HỌC</h3>
+
+						@if (Model.Modules.Any())
+						{
+							<div class="accordion" id="moduleAccordion">
+								@foreach (var module in Model.Modules.OrderBy(m => m.ModuleNumber))
+								{
+									string moduleId = $"module-{module.ModuleId}";
+									bool isModuleActive = module.Lessons.Any(l => l.LessonId == ViewBag.LessonId);
+
+									<div class="accordion-item border-0">
+										<h2 class="accordion-header" id="heading-@moduleId">
+											<button class="accordion-button @(isModuleActive ? "active-module" : "")"
+													type="button"
+													data-bs-toggle="collapse"
+													data-bs-target="#collapse-@moduleId"
+													aria-expanded="true"
+													aria-controls="collapse-@moduleId">
+												@module.ModuleName
+											</button>
+										</h2>
+										<div id="collapse-@moduleId" class="accordion-collapse collapse @(isModuleActive ? "show" : "")"
+											 aria-labelledby="heading-@moduleId"
+											 data-bs-parent="#moduleAccordion">
+											<div class="accordion-body">
+												<ul class="list-group">
+													@foreach (var lesson in module.Lessons.OrderBy(l => l.LessonNumber))
+													{
+														bool isLessonActive = lesson.LessonId == ViewBag.LessonId;
+														<li class="list-group-item @(isLessonActive ? "active-lesson" : "")">
+															<a href="@Url.Action("Index", new { courseId = Model.Course.CourseId, lessonId = lesson.LessonId })"
+															   class="text-decoration-none @(isLessonActive ? "fw-bold text-white" : "text-dark")">
+																@lesson.LessonName
+															</a>
+														</li>
+													}
+												</ul>
+											</div>
+										</div>
+									</div>
+								}
+							</div>
+						}
+						else
+						{
+							<p class="text-muted">Chưa có bài học nào.</p>
+						}
+					</div>
+				</div>
+
+				<!-- ĐÁNH GIÁ -->
+				<div class="card mt-3 shadow-sm rounded-lg">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0 text-white">Đánh giá khóa học</h5>
+					</div>
+					<div class="card-body text-center">
+						<div class="mb-2">
+							@for (int i = 1; i <= 5; i++)
+							{
+								<i class="fa fa-star @(i <= Model.AvgRating ? "text-warning" : "text-secondary")"></i>
+							}
+							<small>(@Model.AmountRating đánh giá)</small>
+						</div>
+					</div>
+				</div>
+
+				<!-- NÚT TRỢ GIÚP -->
+				@* <a href="#" class="btn btn-outline-primary w-100 mt-3">
+			<i class="material-icons btn__icon--left">help</i> Hỗ trợ
+			</a> *@
+			</div>
+		</div>
+	}
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom CSS -->
+<style>
+	/* VIDEO */
+	.ratio-16x9 {
+		width: 100%;
+		height: 420px;
+		border-radius: 10px;
+	}
+
+	/* ACCORDION */
+	.accordion-button {
+		background-color: #f8f9fa;
+		color: #333;
+		font-weight: bold;
+		border-radius: 5px;
+		transition: 0.3s;
+	}
+
+		.accordion-button:hover {
+			background-color: #e0f4ff;
+		}
+
+	/* MODULE ACTIVE */
+	.active-module {
+		background-color: #06BBCC !important;
+		color: white !important;
+	}
+
+		.active-module:hover {
+			background-color: #06BBCC !important;
+		}
+
+	/* BÀI HỌC ACTIVE */
+	.active-lesson {
+		background-color: #06BBCC !important;
+		color: white !important;
+		font-weight: bold;
+	}
+
+		.active-lesson a {
+			color: white !important;
+		}
+
+	/* SHADOW & BO GÓC */
+	.shadow-sm {
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+	}
+
+	.rounded-lg {
+		border-radius: 12px !important;
+	}
+</style>
